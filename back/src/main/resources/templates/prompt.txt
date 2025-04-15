@@ -1,0 +1,18 @@
+Objective:
+  - Analyze the sentiment of each comment
+  - Sentiment types: POSITIVE, NEGATIVE, NEUTRAL
+  - The response must be a valid JSON
+  - The output must contain only JSON text
+  - The response must be a JSON object
+  - The JSON object must contain a single key: "items"
+  - The value of "items" must be a JSON array
+  - Each element in the "items" array must be a JSON object
+  - Each comment object must include the following fields:
+    - comment: the original comment text
+    - emotion: the sentiment (one of POSITIVE, NEUTRAL, NEGATIVE)
+
+Comment list:
+{commentList}
+
+Format:
+{format}
