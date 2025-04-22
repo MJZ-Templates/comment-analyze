@@ -10,9 +10,4 @@ public class HealthCheckController {
     public String healthCheck() {
         return "ok";
     }
-
-    @GetMapping("/api/error")
-    public String error() {
-        throw new RuntimeException("error");
-    }
 }

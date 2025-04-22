@@ -20,7 +20,15 @@ const useEmotionComment = () => {
     );
   };
 
-  return { comments, fetchComments, filterComment };
+  const orderComment = (option) => {
+    if (option === "most-like") {
+      comments.sort((a, b) => b.likeCount - a.likeCount);
+      return;
+    }
+    comments.sort((a, b) => a.likeCount - b.likeCount);
+  };
+
+  return { comments, fetchComments, filterComment, orderComment };
 };
 
 export default useEmotionComment;

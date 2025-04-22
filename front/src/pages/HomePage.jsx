@@ -7,7 +7,8 @@ import useEmotionComment from "../hooks/useEmotionComment";
 import useWordFrequency from "../hooks/useWordFrequency";
 
 const HomePage = () => {
-  const { comments, fetchComments, filterComment } = useEmotionComment();
+  const { comments, fetchComments, filterComment, orderComment } =
+    useEmotionComment();
   const { wordFrequency, fetchWordFrequency } = useWordFrequency();
 
   const focusRef = useRef(null);
@@ -21,14 +22,6 @@ const HomePage = () => {
     fetchWordFrequency(url);
   };
 
-  const handleEmotionAnalyze = (url) => {
-    fetchComments(url);
-  };
-
-  const handleWordFrequency = (url) => {
-    fetchWordFrequency(url);
-  };
-
   return (
     <Page>
       <PageTitle>Comment Analyze</PageTitle>
@@ -39,12 +32,13 @@ const HomePage = () => {
       ></SearchBox>
       <Results>
         <Comments
-          onSearch={handleEmotionAnalyze}
-          comments={comments}
+          onSearch={fetchComments}
+          onOrder={orderComment}
           onFilter={filterComment}
+          comments={comments}
         />
         <CommentGraph
-          onSearch={handleWordFrequency}
+          onSearch={fetchWordFrequency}
           wordFrequency={wordFrequency}
         />
       </Results>

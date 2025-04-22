@@ -3,7 +3,6 @@ package arkain.dev.back.ai.app.openai;
 import arkain.dev.back.ai.app.AiService;
 import arkain.dev.back.ai.app.dto.EmotionResponse;
 import arkain.dev.back.ai.app.helper.EmotionListWrapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatModel;
@@ -27,7 +26,6 @@ import java.util.Map;
 public class OpenAiService implements AiService {
 
     private final ChatModel chatModel;
-    private final ObjectMapper objectMapper;
 
     @Value("classpath:/templates/prompt.txt")
     private Resource prompt;

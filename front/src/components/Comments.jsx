@@ -3,8 +3,20 @@ import styled from "styled-components";
 import { getEmojiByEmotion } from "../utils/emotionToEmoji";
 import Button from "./Button";
 import SearchBox from "./SearchBox";
+import { AiOutlineLike } from "react-icons/ai";
+import { FiChevronDown } from "react-icons/fi";
+import { FaSortAmountDown } from "react-icons/fa";
+import useDropdown from "../hooks/useDropdown";
 
-const Comments = ({ comments, onSearch, onFilter }) => {
+const sortOptions = ["most-like", "less-like"];
+
+const Comments = ({ comments, onSearch, onOrder, onFilter }) => {
+  const { open, selected, toggleOpen, handleSelect, dropdownRef } = useDropdown(
+    {
+      onSelect: onOrder,
+    }
+  );
+
   return (
     <Container>
       <h1>Emotion Analysis</h1>
@@ -14,7 +26,7 @@ const Comments = ({ comments, onSearch, onFilter }) => {
           text={"Fetch Emotion Analysis"}
         ></SearchBox>
       </SearchContainer>
-      {comments && (
+      {comments.length > 0 && (
         <Buttons>
           <ALLButton onClick={() => onFilter("ALL")}>ALL</ALLButton>
           <FilterButton emotion="POSITIVE" onClick={() => onFilter("POSITIVE")}>
@@ -28,13 +40,40 @@ const Comments = ({ comments, onSearch, onFilter }) => {
           </FilterButton>
         </Buttons>
       )}
+      {comments.length > 0 && (
+        <DropdownWrapper ref={dropdownRef}>
+          <OrderButton onClick={toggleOpen}>
+            <FaSortAmountDown />
+            &nbsp; &nbsp;
+            {selected}
+          </OrderButton>
+          {open && (
+            <Dropdown>
+              {sortOptions.map((option) => (
+                <DropdownItem key={option} onClick={() => handleSelect(option)}>
+                  {option}
+                </DropdownItem>
+              ))}
+            </Dropdown>
+          )}
+        </DropdownWrapper>
+      )}
+
       <CommentList>
         {comments &&
           comments.map((comment) => (
             <Comment key={comment.id} emotion={comment.emotion}>
               <CommentText>{comment.comment}</CommentText>
               <CommentInfo>
-                <CommentLikeCount>{comment.likeCount} Likes</CommentLikeCount>
+                <CommentLikeCount>
+                  {comment.likeCount}
+                  <AiOutlineLike
+                    style={{
+                      color: "black",
+                      fontWeight: "bolder",
+                    }}
+                  />
+                </CommentLikeCount>
                 <CommentEmotion>
                   {getEmojiByEmotion(comment.emotion)}
                 </CommentEmotion>
@@ -64,8 +103,59 @@ const Buttons = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 4px;
   gap: 8px;
+`;
+
+const OrderButton = styled(Button)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+`;
+
+const DropdownWrapper = styled.div`
+  position: relative;
+  align-self: flex-end;
+  margin-bottom: 16px;
+  width: auto;
+`;
+
+const Dropdown = styled.div`
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background-color: white;
+  color: black;
+  border-radius: 4px;
+  width: 160px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  overflow: hidden;
+`;
+
+const DropdownItem = styled.div`
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+
+  &:hover {
+    background-color: #555;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 const CommentList = styled.div`
@@ -106,8 +196,9 @@ const CommentInfo = styled.div`
 const CommentLikeCount = styled.span`
   font-size: 14px;
   color: #fff;
-  display: block;
+  display: flex;
   padding-right: 12px;
+  gap: 4px;
 `;
 
 const CommentEmotion = styled.span`

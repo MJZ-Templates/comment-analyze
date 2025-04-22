@@ -31,6 +31,7 @@ public class EmotionAsyncService {
                 .mapToObj(i -> new EmotionResponse(
                         originals.get(i).id(),
                         originals.get(i).comment(),
+                        originals.get(i).likeCount(),
                         results.get(i).emotion()
                 ))
                 .toList();
