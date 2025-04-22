@@ -1,19 +1,52 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import Comments from "../components/Comments";
 import CommentGraph from "../components/CommentGraph";
+import SearchBox from "../components/SearchBox";
+import useEmotionComment from "../hooks/useEmotionComment";
+import useWordFrequency from "../hooks/useWordFrequency";
 
 const HomePage = () => {
+  const { comments, fetchComments, filterComment } = useEmotionComment();
+  const { wordFrequency, fetchWordFrequency } = useWordFrequency();
+
+  const focusRef = useRef(null);
+
+  useEffect(() => {
+    focusRef.current?.focus();
+  }, []);
+
+  const handleSearch = (url) => {
+    fetchComments(url);
+    fetchWordFrequency(url);
+  };
+
+  const handleEmotionAnalyze = (url) => {
+    fetchComments(url);
+  };
+
+  const handleWordFrequency = (url) => {
+    fetchWordFrequency(url);
+  };
+
   return (
     <Page>
-      <PageTitle>Youtube Comment Analyze</PageTitle>
-      <UrlComponents>
-        <UrlInput type="text" placeholder="Put the url" />
-        <UrlButton>Search!</UrlButton>
-      </UrlComponents>
+      <PageTitle>Comment Analyze</PageTitle>
+      <SearchBox
+        ref={focusRef}
+        onSearch={handleSearch}
+        text={"Fetch All!"}
+      ></SearchBox>
       <Results>
-        <Comments></Comments>
-        <CommentGraph></CommentGraph>
+        <Comments
+          onSearch={handleEmotionAnalyze}
+          comments={comments}
+          onFilter={filterComment}
+        />
+        <CommentGraph
+          onSearch={handleWordFrequency}
+          wordFrequency={wordFrequency}
+        />
       </Results>
     </Page>
   );
@@ -30,43 +63,11 @@ const Page = styled.div`
 
 const PageTitle = styled.h1``;
 
-const UrlComponents = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 20px;
-  gap: 10px;
-`;
-
-const UrlInput = styled.input`
-  flex: 1;
-  min-width: 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const UrlButton = styled.button`
-  padding: 10px 20px;
-  width: 100px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 10px;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
 const Results = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  gap: 20px;
   width: 100%;
-  margin-top: 20px;
 `;
 
 export default HomePage;
