@@ -16,4 +16,5 @@ export const emotionMockData = Array.from({ length: 100 }, (_, index) => ({
   id: (index + 1).toString(),
   comment: comments[Math.floor(Math.random() * comments.length)],
   emotion: emotions[Math.floor(Math.random() * emotions.length)],
+  likeCount: Math.floor(Math.random() * 21),
 }));

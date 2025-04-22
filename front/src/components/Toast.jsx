@@ -17,8 +17,8 @@ const Toast = ({ message, duration = 1000, onDone }) => {
   useEffect(() => {
     if (!visible && localMessage) {
       const cleanup = setTimeout(() => {
-        onDone?.(); // 외부에서 상태 제거
-        setLocalMessage(null); // 내부 메시지도 제거
+        onDone?.();
+        setLocalMessage(null);
       }, 300); // fadeOut duration
       return () => clearTimeout(cleanup);
     }

@@ -16,34 +16,16 @@ const Comments = ({ comments, onSearch, onFilter }) => {
       </SearchContainer>
       {comments && (
         <Buttons>
-          <Button
-            onClick={() => onFilter("ALL")}
-            style={{
-              backgroundColor: "white",
-              color: "black",
-              border: "1px solid #ccc",
-            }}
-          >
-            ALL
-          </Button>
-          <Button
-            onClick={() => onFilter("POSITIVE")}
-            style={{ flex: 1, backgroundColor: "#007bff" }}
-          >
+          <ALLButton onClick={() => onFilter("ALL")}>ALL</ALLButton>
+          <FilterButton emotion="POSITIVE" onClick={() => onFilter("POSITIVE")}>
             POSITIVE
-          </Button>
-          <Button
-            onClick={() => onFilter("NEGATIVE")}
-            style={{ flex: 1, backgroundColor: "#ee5858" }}
-          >
+          </FilterButton>
+          <FilterButton emotion="NEGATIVE" onClick={() => onFilter("NEGATIVE")}>
             NEGATIVE
-          </Button>
-          <Button
-            onClick={() => onFilter("NEUTRAL")}
-            style={{ flex: 1, backgroundColor: "#adb5bd" }}
-          >
+          </FilterButton>
+          <FilterButton emotion="NEUTRAL" onClick={() => onFilter("NEUTRAL")}>
             NEUTRAL
-          </Button>
+          </FilterButton>
         </Buttons>
       )}
       <CommentList>
@@ -51,9 +33,12 @@ const Comments = ({ comments, onSearch, onFilter }) => {
           comments.map((comment) => (
             <Comment key={comment.id} emotion={comment.emotion}>
               <CommentText>{comment.comment}</CommentText>
-              <CommentEmotion>
-                {getEmojiByEmotion(comment.emotion)}
-              </CommentEmotion>
+              <CommentInfo>
+                <CommentLikeCount>{comment.likeCount} Likes</CommentLikeCount>
+                <CommentEmotion>
+                  {getEmojiByEmotion(comment.emotion)}
+                </CommentEmotion>
+              </CommentInfo>
             </Comment>
           ))}
       </CommentList>
@@ -113,11 +98,39 @@ const CommentText = styled.p`
   color: white;
 `;
 
+const CommentInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CommentLikeCount = styled.span`
+  font-size: 14px;
+  color: #fff;
+  display: block;
+  padding-right: 12px;
+`;
+
 const CommentEmotion = styled.span`
   font-size: 24px;
   color: #666;
   display: block;
   padding-right: 12px;
+`;
+
+const FilterButton = styled(Button)`
+  flex: 1;
+  background-color: ${({ emotion }) =>
+    emotion === "POSITIVE"
+      ? "#007bff"
+      : emotion === "NEGATIVE"
+      ? "#ee5858"
+      : "#adb5bd"};
+`;
+
+const ALLButton = styled(Button)`
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
 `;
 
 export default Comments;

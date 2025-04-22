@@ -2,8 +2,8 @@ import { useState } from "react";
 import { emotionMockData } from "../mocks/emotionComment";
 
 const useEmotionComment = () => {
-  const [originalComments, setOriginalComments] = useState();
-  const [comments, setComments] = useState();
+  const [originalComments, setOriginalComments] = useState([]);
+  const [comments, setComments] = useState([]);
 
   const fetchComments = async () => {
     setOriginalComments(emotionMockData);
