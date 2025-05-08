@@ -1,13 +1,43 @@
 import { useState } from "react";
-import { emotionMockData } from "../mocks/emotionComment";
+import { getEmotions } from "../apis/emotion";
 
-const useEmotionComment = () => {
+const useEmotionComment = (identifier) => {
   const [originalComments, setOriginalComments] = useState([]);
   const [comments, setComments] = useState([]);
+  const [nextPageToken, setNextPageToken] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const fetchComments = async () => {
-    setOriginalComments(emotionMockData);
-    setComments(emotionMockData);
+  const fetchComments = async (identifier) => {
+    try {
+      setLoading(true);
+      const data = await getEmotions(identifier);
+
+      setOriginalComments(data.comments);
+      setComments(data.comments);
+      setNextPageToken(data.nextPageToken);
+    } catch (error) {
+      console.error("failed to fetch next page comments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchNextPage = async () => {
+    if (!nextPageToken) return;
+
+    try {
+      setLoading(true);
+      const data = await getEmotions(identifier, undefined, nextPageToken);
+      const newComments = [...originalComments, ...data.comments];
+
+      setOriginalComments(newComments);
+      setComments(newComments);
+      setNextPageToken(data.nextPageToken);
+    } catch (error) {
+      console.error("failed to fetch next page comments:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filterComment = (emotion) => {
@@ -21,14 +51,24 @@ const useEmotionComment = () => {
   };
 
   const orderComment = (option) => {
-    if (option === "most-like") {
-      comments.sort((a, b) => b.likeCount - a.likeCount);
-      return;
-    }
-    comments.sort((a, b) => a.likeCount - b.likeCount);
+    const sorted = [...comments].sort((a, b) => {
+      if (option === "most-like") {
+        return b.likeCount - a.likeCount;
+      }
+      return a.likeCount - b.likeCount;
+    });
+    setComments(sorted);
   };
 
-  return { comments, fetchComments, filterComment, orderComment };
+  return {
+    comments,
+    fetchComments,
+    fetchNextPage,
+    filterComment,
+    orderComment,
+    hasNextPage: !!nextPageToken,
+    fetchEmotionLoading: loading,
+  };
 };
 
 export default useEmotionComment;

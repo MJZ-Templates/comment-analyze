@@ -17,7 +17,10 @@ public class EmotionAsyncService {
 
     @Async("emotionTaskExecutor")
     public CompletableFuture<List<EmotionResponse>> analyze(List<SocialComment> comments) {
-        List<String> commentTexts = comments.stream().map(SocialComment::comment).toList();
+        List<String> commentTexts = comments.stream()
+                .map(SocialComment::comment)
+                .filter(comment -> comment != null && !comment.trim().isEmpty())
+                .toList();
         List<EmotionResponse> emotionResults = aiService.getEmotion(commentTexts);
 
         // id 붙이기

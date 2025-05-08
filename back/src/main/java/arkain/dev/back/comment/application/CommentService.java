@@ -1,4 +1,4 @@
-package arkain.dev.back.comment.app;
+package arkain.dev.back.comment.application;
 
 import arkain.dev.back.ai.app.EmotionAsyncService;
 import arkain.dev.back.ai.app.dto.EmotionResponse;
@@ -47,6 +47,7 @@ public class CommentService {
         List<EmotionResponse> emotions = futures.stream()
                 .map(CompletableFuture::join)
                 .flatMap(List::stream)
+                .filter(e -> e.comment() != null && !e.comment().trim().isEmpty())
                 .toList();
 
         return new PagedEmotionResponse(emotions, pagedComments.nextPageToken());

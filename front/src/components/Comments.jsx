@@ -2,15 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { getEmojiByEmotion } from "../utils/emotionToEmoji";
 import Button from "./Button";
-import SearchBox from "./SearchBox";
 import { AiOutlineLike } from "react-icons/ai";
-import { FiChevronDown } from "react-icons/fi";
 import { FaSortAmountDown } from "react-icons/fa";
 import useDropdown from "../hooks/useDropdown";
 
 const sortOptions = ["most-like", "less-like"];
 
-const Comments = ({ comments, onSearch, onOrder, onFilter }) => {
+const Comments = ({ comments, onOrder, onFilter }) => {
   const { open, selected, toggleOpen, handleSelect, dropdownRef } = useDropdown(
     {
       onSelect: onOrder,
@@ -20,12 +18,7 @@ const Comments = ({ comments, onSearch, onOrder, onFilter }) => {
   return (
     <Container>
       <h1>Emotion Analysis</h1>
-      <SearchContainer>
-        <SearchBox
-          onSearch={onSearch}
-          text={"Fetch Emotion Analysis"}
-        ></SearchBox>
-      </SearchContainer>
+      <SearchContainer></SearchContainer>
       {comments.length > 0 && (
         <Buttons>
           <ALLButton onClick={() => onFilter("ALL")}>ALL</ALLButton>

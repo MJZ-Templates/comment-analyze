@@ -24,17 +24,18 @@ const pastelColors = [
   "#BDB2FF",
 ];
 
-const CommentGraph = ({ wordFrequency, onSearch }) => {
+const CommentGraph = ({ wordFrequency }) => {
   const data = Object.entries(wordFrequency)
     .map(([word, count]) => ({ word, count }))
-    .sort((a, b) => b.count - a.count);
+    .filter(({ count }) => count > 1)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 20);
 
   const hasData = data.length > 0;
 
   return (
     <Container>
       <h1>Word Frequency</h1>
-      <SearchBox onSearch={onSearch} text={"Fetch Word Frequency"}></SearchBox>
       <BarContainer>
         {hasData && (
           <ResponsiveContainer>

@@ -1,7 +1,7 @@
-package arkain.dev.back.comment.ui;
+package arkain.dev.back.comment.controller;
 
 import arkain.dev.back.ai.app.dto.PagedEmotionResponse;
-import arkain.dev.back.comment.app.CommentService;
+import arkain.dev.back.comment.application.CommentService;
 import arkain.dev.back.comment.dto.PagedSocialComments;
 import arkain.dev.back.comment.dto.PagedWordFrequencyResponse;
 import arkain.dev.back.common.dto.ResponseDto;

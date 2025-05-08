@@ -1,4 +1,4 @@
-package arkain.dev.back.comment.app.processor;
+package arkain.dev.back.comment.application.processor;
 
 import java.util.regex.Pattern;
 

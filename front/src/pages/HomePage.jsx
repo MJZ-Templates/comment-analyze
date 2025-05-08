@@ -5,11 +5,18 @@ import CommentGraph from "../components/CommentGraph";
 import SearchBox from "../components/SearchBox";
 import useEmotionComment from "../hooks/useEmotionComment";
 import useWordFrequency from "../hooks/useWordFrequency";
+import { HashLoader } from "react-spinners";
 
 const HomePage = () => {
-  const { comments, fetchComments, filterComment, orderComment } =
-    useEmotionComment();
-  const { wordFrequency, fetchWordFrequency } = useWordFrequency();
+  const {
+    fetchEmotionLoading,
+    comments,
+    fetchComments,
+    filterComment,
+    orderComment,
+  } = useEmotionComment();
+  const { wordFrequencyLoading, wordFrequency, fetchWordFrequency } =
+    useWordFrequency();
 
   const focusRef = useRef(null);
 
@@ -31,16 +38,24 @@ const HomePage = () => {
         text={"Fetch All!"}
       ></SearchBox>
       <Results>
-        <Comments
-          onSearch={fetchComments}
-          onOrder={orderComment}
-          onFilter={filterComment}
-          comments={comments}
-        />
-        <CommentGraph
-          onSearch={fetchWordFrequency}
-          wordFrequency={wordFrequency}
-        />
+        <ComponentWrapper>
+          {fetchEmotionLoading ? (
+            <HashLoader />
+          ) : (
+            <Comments
+              comments={comments}
+              onOrder={orderComment}
+              onFilter={filterComment}
+            />
+          )}
+        </ComponentWrapper>
+        <ComponentWrapper>
+          {wordFrequencyLoading ? (
+            <HashLoader />
+          ) : (
+            <CommentGraph wordFrequency={wordFrequency} />
+          )}
+        </ComponentWrapper>
       </Results>
     </Page>
   );
@@ -62,6 +77,14 @@ const Results = styled.div`
   align-items: flex-start;
   gap: 20px;
   width: 100%;
+`;
+
+const ComponentWrapper = styled.div`
+  width: 100%;
+  min-height: 600px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 `;
 
 export default HomePage;

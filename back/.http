@@ -1,0 +1,14 @@
+###
+GET http://localhost:8080/api/comment?
+    identifier=https://www.youtube.com/watch?v=ElOzKk09zIo&
+    order=time
+
+###
+GET http://localhost:8080/api/comment/emotion?
+    identifier=https://www.youtube.com/watch?v=ElOzKk09zIo&
+    order=time
+
+###
+GET http://localhost:8080/api/comment/frequency?
+    identifier=https://www.youtube.com/watch?v=ElOzKk09zIo&
+    order=time
